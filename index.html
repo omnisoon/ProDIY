@@ -25,7 +25,8 @@
           },
           colors: {
             ink: "#111111",
-            soft: "#6E6E73"
+            soft: "#6E6E73",
+            gold: "#B59B6A"
           },
           boxShadow: {
             card: "0 12px 40px rgba(0, 0, 0, 0.08)"
@@ -36,7 +37,7 @@
   </script>
 </head>
 <body class="bg-white text-ink font-inter antialiased">
-  <div id="app" class="min-h-screen">
+  <div id="app" class="min-h-screen flex flex-col">
     <header class="px-6 md:px-10 py-6 border-b border-black/5">
       <div class="max-w-6xl mx-auto flex items-center justify-between">
         <p class="font-outfit text-lg tracking-tight">ProDIY</p>
@@ -44,7 +45,7 @@
       </div>
     </header>
 
-    <main class="px-6 md:px-10">
+    <main class="flex-1 px-6 md:px-10">
       <section class="max-w-4xl mx-auto pt-20 md:pt-28 pb-16 md:pb-24 text-center">
         <p class="text-xs uppercase tracking-[0.18em] text-soft mb-5">Core Message</p>
         <h1 class="font-outfit text-4xl md:text-6xl leading-tight tracking-tight">
@@ -134,6 +135,19 @@
         </div>
       </section>
     </main>
+
+    <footer class="mt-auto border-t border-black/5">
+      <div
+        class="max-w-6xl mx-auto px-6 md:px-10 py-10 md:py-12 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-center sm:text-left"
+      >
+        <p class="text-xs text-soft leading-relaxed">
+          © 2026 ProDIY.ai. All rights reserved.
+        </p>
+        <p class="text-xs text-soft leading-relaxed">
+          Designed by <span class="text-gold font-medium">Soohun Kim</span>
+        </p>
+      </div>
+    </footer>
   </div>
 
   <div
