@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Privacy Policy · ProDIY</title>
-<meta name="description" content="ProDIY Privacy Policy — what we collect, how your photos and notes are processed, and your choices.">
+<meta name="description" content="ProDIY Privacy Policy — what we collect, how your photos and notes are processed, where your account data is stored, and your choices.">
 <meta name="robots" content="index, follow">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='28'%3E%F0%9F%A6%AB%3C/text%3E%3C/svg%3E">
 <style>
@@ -97,11 +97,11 @@
   <h1>ProDIY Privacy Policy</h1>
   <div class="meta">
     <strong>Effective date:</strong> May 30, 2026 &nbsp;·&nbsp;
-    <strong>Last updated:</strong> May 12, 2026
+    <strong>Last updated:</strong> May 24, 2026
   </div>
 
   <p class="intro">
-    This Privacy Policy explains what information ProDIY ("ProDIY," "we," "our," or "us") collects when you use the ProDIY iOS app (the "App"), how that information is used, and the choices you have. The App is operated by ProDIY (contact details in §10).
+    This Privacy Policy explains what information ProDIY ("ProDIY," "we," "our," or "us") collects when you use the ProDIY iOS app (the "App"), how that information is used, where it is stored, and the choices you have. The App is operated by ProDIY (contact details in §10). This Policy works alongside our <a href="/terms/">Terms of Service</a>.
   </p>
   <p class="intro">
     We've kept this document short and plain-language on purpose. If a section is unclear, write to us at <a href="mailto:privacy@prodiy.ai">privacy@prodiy.ai</a> and we will clarify.
@@ -111,25 +111,31 @@
 
   <h2>1. What ProDIY does</h2>
   <p>
-    ProDIY is a home-repair coach. You describe a problem at home — by photo, text, or both — and the App returns a diagnosis, a parts list, and step-by-step guidance. To produce that response, the App sends your description to a third-party AI service (see §3).
+    ProDIY is a home-repair coach. You describe a problem at home — by photo, text, or both — and the App returns a diagnosis, a parts list, and step-by-step guidance. To produce that response, the App sends your description to third-party AI services (see §3).
   </p>
   <div class="callout">
     <strong>ProDIY is not a licensed plumber, electrician, HVAC technician, contractor, or attorney.</strong> Suggestions are educational. For anything involving gas, structural, panel-internal electrical, or imminent safety risk, we route you to a licensed professional and decline to provide DIY steps.
   </div>
 
   <h2>2. Information we collect</h2>
-  <p>We collect only what is needed to deliver the diagnosis you ask for.</p>
+  <p>We collect only what is needed to deliver the diagnosis you ask for, operate your account, and keep the App safe.</p>
 
   <h3>2.1 You give us this directly</h3>
   <ul>
+    <li><strong>Account email</strong> when you sign up with email and password. We use this to sign you in, send verification links, and contact you about your account.</li>
+    <li><strong>Password</strong> when you sign up with email and password. Your password is stored only as a one-way bcrypt hash; we never see or store the plaintext.</li>
+    <li><strong>Apple Sign In identifier</strong> when you choose to sign in with Apple. If you use Apple's "Hide My Email" feature, we receive a private relay address (e.g. <code>xxxx@privaterelay.appleid.com</code>) instead of your real email — your real address is never disclosed to us.</li>
+    <li><strong>Consent choices</strong> — your timestamped agreement to our Terms of Service, this Privacy Policy, the age confirmation, and (optional, off by default) marketing emails.</li>
     <li><strong>Photos</strong> you take or pick from your library to attach to a diagnosis or project plan.</li>
     <li><strong>Text</strong> you type to describe the problem (the "note" field).</li>
     <li><strong>Optional context</strong> you set: room/location, project category, budget hint.</li>
-    <li><strong>Account email</strong> if and when account creation is enabled (currently the MVP runs without server-backed accounts; this row becomes active when accounts ship).</li>
+    <li><strong>Feedback</strong> when you tell us whether a recommendation was helpful, or how a project turned out.</li>
   </ul>
 
   <h3>2.2 The device sends us this automatically</h3>
   <ul>
+    <li><strong>IP address</strong> at the moment of each request — used for rate limiting, abuse prevention, and breaking ties when investigating account-takeover attempts. We do not derive precise location from your IP.</li>
+    <li><strong>Authentication metadata</strong> — login timestamps, session refresh times, the device family ("iPhone"), and a generic user-agent string. Used to keep your account secure.</li>
     <li><strong>Device locale</strong> (e.g. <code>en-US</code>, <code>ko-KR</code>) — used so the AI response carries a locale tag for downstream localization.</li>
     <li><strong>Generic crash and error events</strong> — when the App crashes or the AI call fails, we collect a stack trace and a non-personal error code. We do <em>not</em> collect the photo, the note, or any text you typed in these reports.</li>
   </ul>
@@ -137,9 +143,9 @@
   <h3>2.3 We do NOT collect</h3>
   <ul>
     <li>Your contact list, calendar, microphone audio, or precise GPS location.</li>
-    <li>Health, biometric, financial, or payment data.</li>
+    <li>Health, biometric, financial, or payment data. (Payment information for any future Premium tier will be processed by Apple's In-App Purchase and is governed by Apple's privacy policy — we never see your card.)</li>
     <li>Browsing history outside the App.</li>
-    <li>Any information from third-party social profiles unless you explicitly link them (not currently a feature).</li>
+    <li>Any information from third-party social profiles beyond your Apple Sign In identifier (described in §2.1).</li>
   </ul>
 
   <h2>3. How your photos and text are processed</h2>
@@ -150,26 +156,41 @@
     When you submit a diagnosis, the App sends your photo(s) and note to <strong>Google's Gemini API</strong> (a third-party AI service operated by Google LLC). Gemini analyzes your input and returns a structured diagnosis, which the App renders for you.
   </p>
   <p>
-    We use Gemini under Google's standard Generative AI Terms. Google's own privacy and data-use practices apply to data once it is sent to their service. Their policies are available at <a href="https://ai.google.dev/gemini-api/terms" rel="noopener">ai.google.dev/gemini-api/terms</a> and <a href="https://policies.google.com/privacy" rel="noopener">policies.google.com/privacy</a>.
+    To compose the personalized recommendation that follows the diagnosis (parts list, step-by-step guidance, safety routing), our backend also calls <strong>Anthropic's Claude API</strong>. The query sent to Anthropic includes the diagnosis text returned by Gemini and the relevant retrieval context from our knowledge base; it does not include the original photo.
+  </p>
+  <p>
+    We use Gemini under Google's standard Generative AI Terms (<a href="https://ai.google.dev/gemini-api/terms" rel="noopener">ai.google.dev/gemini-api/terms</a>, <a href="https://policies.google.com/privacy" rel="noopener">policies.google.com/privacy</a>) and Claude under Anthropic's Commercial Terms of Service (<a href="https://www.anthropic.com/legal/commercial-terms" rel="noopener">anthropic.com/legal/commercial-terms</a>, <a href="https://www.anthropic.com/legal/privacy" rel="noopener">anthropic.com/legal/privacy</a>). Each provider's own privacy and data-use practices apply to data once it is sent to their service.
   </p>
 
   <h3>3.2 What we do <em>not</em> do</h3>
   <ul>
-    <li>We do <strong>not</strong> save your photos or notes to a ProDIY server. Once a diagnosis is rendered, the photo and note live only on your device (until you delete them).</li>
-    <li>We do <strong>not</strong> share your photos or notes with anyone other than Google (the AI provider) for the sole purpose of generating your diagnosis.</li>
+    <li>We do <strong>not</strong> save your photos to a ProDIY server. Each photo travels directly from your device to Google Gemini for diagnosis. We never persist the photo bytes on our backend.</li>
+    <li>We do <strong>not</strong> share your photos or notes with anyone other than the AI providers listed above for the sole purpose of generating your diagnosis.</li>
     <li>We do <strong>not</strong> sell your data, ever. (CCPA "Do Not Sell" applies by default for all users — there is nothing to opt out of because we do not sell.)</li>
     <li>We do <strong>not</strong> use your photos or notes to train any AI model on our side.</li>
+    <li>We do <strong>not</strong> embed advertising SDKs in the App.</li>
   </ul>
 
-  <h3>3.3 Local storage on your device</h3>
-  <p>The App uses iOS device storage (<code>AsyncStorage</code>) to keep:</p>
+  <h3>3.3 What we store on our backend</h3>
+  <p>The following <em>is</em> stored on our backend (Supabase, hosted in the United States, encrypted at rest, access-controlled by row-level security so only your account can read its own rows):</p>
   <ul>
-    <li>the projects you save,</li>
-    <li>the most recent diagnosis result,</li>
-    <li>your onboarding answers and notification preferences.</li>
+    <li>Your account record (email or Apple Sign In identifier, hashed password, account creation timestamp).</li>
+    <li>Your consent events (which version of our Terms / Privacy / Age confirmation / marketing opt-in you agreed to, and when).</li>
+    <li>Your feedback events (the rating you gave each recommendation, the outcome you reported for each project).</li>
+    <li>Your recommendation history — the AI-generated diagnosis text, parts list, and step-by-step guidance that was shown to you, plus identifiers for the prompt and retrieval version used. We retain this so the App can show you what you've previously been shown, and so we can investigate and reproduce any safety-relevant issue.</li>
+    <li>Authentication metadata (§2.2) — login timestamps, IP at sign-in, device family — for the security purposes described above.</li>
+  </ul>
+
+  <h3>3.4 What stays on your device</h3>
+  <p>The App also uses iOS device storage to keep:</p>
+  <ul>
+    <li>the projects you save (with a copy synced to our backend in a later release, so you can pick them up on a second device),</li>
+    <li>the most recent in-progress diagnosis draft (not sent to our backend until you submit feedback or save the project),</li>
+    <li>your onboarding answers and notification preferences,</li>
+    <li>your active authentication tokens — stored in Apple's <strong>Keychain</strong> via <code>expo-secure-store</code>, never in plain <code>AsyncStorage</code>.</li>
   </ul>
   <p>
-    Everything in local storage stays on your device. You can clear it at any time by deleting the App or by using the in-app "Stop tracking this project" / "Discard" options.
+    Everything on your device stays on your device. Deleting the App removes all local storage immediately. Deleting your account (see §6) is the only way to remove the backend records described in §3.3.
   </p>
 
   <h2>4. Why we collect what we collect</h2>
@@ -177,9 +198,13 @@
     <thead><tr><th>Data</th><th>Purpose</th></tr></thead>
     <tbody>
       <tr><td>Photos, notes, room, category</td><td>Generate the AI diagnosis you requested</td></tr>
+      <tr><td>Email / Apple Sign In ID, hashed password</td><td>Identify your account and let you sign in</td></tr>
+      <tr><td>Consent events</td><td>Prove your consent and respect your choices over time</td></tr>
+      <tr><td>Feedback events</td><td>Improve recommendation quality and surface safety issues</td></tr>
+      <tr><td>Recommendation history</td><td>Show you what you've previously been shown and audit safety</td></tr>
+      <tr><td>IP address, login timestamps</td><td>Rate limiting, abuse prevention, account-takeover investigation</td></tr>
       <tr><td>Locale</td><td>Tag responses for localized rendering</td></tr>
       <tr><td>Crash and error events</td><td>Diagnose bugs and improve reliability</td></tr>
-      <tr><td>Local-storage projects</td><td>Show you your in-progress and completed work</td></tr>
     </tbody>
   </table>
   <p>We do not use any of the data above for advertising. The App contains no third-party advertising SDKs.</p>
@@ -188,38 +213,60 @@
   <table>
     <thead><tr><th>Category</th><th>Retention</th></tr></thead>
     <tbody>
-      <tr><td>Photos / notes you send to the AI</td><td>Held by Google per their terms; not retained on ProDIY servers</td></tr>
-      <tr><td>Local projects on your device</td><td>Until you delete them or uninstall the App</td></tr>
+      <tr><td>Photos / notes you send to the AI</td><td>Held by the AI provider per their terms; not retained on ProDIY servers</td></tr>
+      <tr><td>Backend account, consent, feedback, recommendation history</td><td>Until you delete your account; then anonymized within 30 days and fully removed within 90 days</td></tr>
+      <tr><td>Authentication metadata (IP, login times)</td><td>180 days, then aggregated or deleted</td></tr>
+      <tr><td>Local projects and drafts on your device</td><td>Until you delete them or uninstall the App</td></tr>
       <tr><td>Crash / error events</td><td>90 days, then aggregated or deleted</td></tr>
-      <tr><td>Account email (when enabled)</td><td>Until you close your account</td></tr>
     </tbody>
   </table>
 
   <h2>6. Your rights and choices</h2>
-  <p>You can do all of the following from inside the App, with no email to us required:</p>
-  <ul>
-    <li><strong>Delete a project</strong> — the project is removed from your device's local storage.</li>
-    <li><strong>Discard a diagnosis</strong> — the photo and note are removed from the local draft.</li>
-    <li><strong>Stop using the App entirely</strong> — deleting the App removes all local storage. There is no separate ProDIY account to close while the App runs without server accounts.</li>
-  </ul>
+  <h3>6.1 Delete your account</h3>
   <p>
-    Where applicable, you also have the rights granted by <strong>GDPR</strong> (if you are in the EU/EEA/UK) and <strong>CCPA</strong> (if you are a California resident), including the right to access, correct, delete, and port your data, and the right to lodge a complaint with your local data-protection authority. To exercise any of these rights, email <a href="mailto:privacy@prodiy.ai">privacy@prodiy.ai</a> and identify yourself well enough that we can locate any data we hold about you. Most users have no server-side data; in that case we will reply confirming that.
+    You can delete your account at any time from inside the App: <strong>Settings → Account → Delete Account</strong>. Deleting your account immediately revokes your sessions on every device, anonymizes the backend records described in §3.3 within 30 days, and fully removes them within 90 days. Deletion cannot be undone. (We provide this in-app deletion path in compliance with Apple's App Store Review Guideline 5.1.1(v).)
+  </p>
+  <h3>6.2 Other in-app controls</h3>
+  <ul>
+    <li><strong>Delete a project</strong> — the project is removed from your device's local storage and (where synced) marked for deletion from the backend on next sync.</li>
+    <li><strong>Discard a diagnosis</strong> — the photo and note are removed from the local draft and never sent to the backend.</li>
+    <li><strong>Sign out</strong> — clears your authentication token from this device while keeping your account active. You can sign back in on the same or another device.</li>
+    <li><strong>Stop using the App entirely</strong> — deleting the App removes all local storage. To also remove your backend data, delete your account first (§6.1) and then uninstall.</li>
+  </ul>
+  <h3>6.3 Statutory rights</h3>
+  <p>
+    Where applicable, you also have the rights granted by <strong>GDPR</strong> (if you are in the EU/EEA/UK) and <strong>CCPA</strong> (if you are a California resident), including the right to access, correct, delete, port, and restrict processing of your data, and the right to lodge a complaint with your local data-protection authority. To exercise any of these rights, email <a href="mailto:privacy@prodiy.ai">privacy@prodiy.ai</a> and identify yourself well enough that we can locate any data we hold about you. We will respond within 30 days.
   </p>
   <p>We do not sell personal information or share it for cross-context behavioral advertising.</p>
 
-  <h2>7. Children</h2>
+  <h2>7. Children and minimum age</h2>
   <p>
-    The App is <strong>not directed to children under 13</strong> (or under the minimum age in your country). We do not knowingly collect data from children. If you are a parent or guardian and believe your child has used the App, contact <a href="mailto:privacy@prodiy.ai">privacy@prodiy.ai</a> and we will delete the data.
+    The App is rated <strong>17+</strong> on the App Store because some content discusses tools, chemicals, and procedures unsuitable for younger users. By creating an account, you confirm that you are at least 17 years old (or the higher minimum age that applies in your jurisdiction).
+  </p>
+  <p>
+    The App is <strong>not directed to children under 13</strong>, and we do not knowingly collect personal information from anyone under 13 in compliance with the U.S. Children's Online Privacy Protection Act (COPPA). If you are a parent or guardian and believe your child has created an account or used the App, contact <a href="mailto:privacy@prodiy.ai">privacy@prodiy.ai</a> and we will delete the account and any associated data.
   </p>
 
   <h2>8. Security</h2>
   <p>
-    We use industry-standard transport encryption (HTTPS / TLS) for all network requests, including the call to Google Gemini. Local storage on iOS is sandboxed by the operating system. No system is perfectly secure; if you become aware of a vulnerability, please report it to <a href="mailto:security@prodiy.ai">security@prodiy.ai</a>.
+    We protect your data with the following controls:
+  </p>
+  <ul>
+    <li><strong>Transport encryption</strong> — all network requests, including calls to our backend and to AI providers, use HTTPS / TLS 1.2 or higher.</li>
+    <li><strong>Encryption at rest</strong> — backend data hosted on Supabase is encrypted at rest using AES-256.</li>
+    <li><strong>Row-Level Security (RLS)</strong> — database policies in Supabase enforce that each row in your account's data can only be read or modified by your authenticated session.</li>
+    <li><strong>Hashed passwords</strong> — passwords are stored only as bcrypt hashes; the plaintext is never stored or logged.</li>
+    <li><strong>Session security</strong> — authentication uses Supabase Auth with JWT-based sessions and rotating refresh tokens. Tokens are stored in Apple Keychain on your device, not in plain storage.</li>
+    <li><strong>Backend hosting</strong> — our backend runs on Fly.io in the <code>sjc</code> region (San Jose, California, United States), behind HTTPS at <code>api.prodiy.ai</code>.</li>
+    <li><strong>Sandboxed local storage</strong> — local storage on iOS is sandboxed by the operating system.</li>
+  </ul>
+  <p>
+    No system is perfectly secure; if you become aware of a vulnerability, please report it to <a href="mailto:security@prodiy.ai">security@prodiy.ai</a> and we will respond promptly.
   </p>
 
   <h2>9. Changes to this policy</h2>
   <p>
-    We may update this policy as the App grows — for example when we add account creation, an Android version, or new third-party services. We will post the new policy at this URL with a new "Last updated" date. For material changes that affect what data we collect or how we use it, we will also surface an in-app notice the next time you open the App.
+    We may update this policy as the App grows — for example when we add new AI providers, expand to additional platforms, or change retention periods. We will post the new policy at this URL with a new "Last updated" date. For material changes that affect what data we collect or how we use it, we will also surface an in-app notice the next time you open the App and, where required by law, request fresh consent.
   </p>
 
   <h2>10. Contact</h2>
@@ -238,11 +285,14 @@
   <p>For transparency, here are the third-party services the App relies on:</p>
   <ul>
     <li><strong>Google Gemini API</strong> — generates diagnoses from your photos / notes. Privacy: <a href="https://policies.google.com/privacy" rel="noopener">policies.google.com/privacy</a>. Terms: <a href="https://ai.google.dev/gemini-api/terms" rel="noopener">ai.google.dev/gemini-api/terms</a>.</li>
-    <li><strong>Apple App Store / iOS</strong> — distribution and platform services. Privacy: <a href="https://www.apple.com/legal/privacy" rel="noopener">apple.com/legal/privacy</a>.</li>
-    <li><strong>Sentry</strong> <em>(planned)</em> — anonymous crash and error telemetry. We configure it to scrub user content from breadcrumbs. Privacy: <a href="https://sentry.io/privacy/" rel="noopener">sentry.io/privacy</a>.</li>
+    <li><strong>Anthropic Claude API</strong> — composes the personalized parts list and step-by-step guidance from the Gemini diagnosis. Receives the diagnosis text and our retrieval context; does not receive the original photo. Privacy: <a href="https://www.anthropic.com/legal/privacy" rel="noopener">anthropic.com/legal/privacy</a>. Terms: <a href="https://www.anthropic.com/legal/commercial-terms" rel="noopener">anthropic.com/legal/commercial-terms</a>.</li>
+    <li><strong>Supabase</strong> — managed Postgres database (US, west region), authentication service (Supabase Auth), and storage. Hosts your account, consent events, feedback, and recommendation history described in §3.3. Privacy: <a href="https://supabase.com/privacy" rel="noopener">supabase.com/privacy</a>.</li>
+    <li><strong>Fly.io</strong> — hosts the App's backend application servers (the API at <code>api.prodiy.ai</code>) in the <code>sjc</code> region. Privacy: <a href="https://fly.io/legal/privacy-policy/" rel="noopener">fly.io/legal/privacy-policy</a>.</li>
+    <li><strong>Apple — App Store, iOS, Sign in with Apple</strong> — distribution, platform services, and federated identity (when you choose Sign in with Apple, Apple authenticates you and returns an opaque identifier to us; we never see your Apple ID password). Privacy: <a href="https://www.apple.com/legal/privacy" rel="noopener">apple.com/legal/privacy</a>.</li>
+    <li><strong>Sentry</strong> — anonymized crash and error telemetry. Configured to scrub user content (photos, notes, account email, IP) from breadcrumbs. Privacy: <a href="https://sentry.io/privacy/" rel="noopener">sentry.io/privacy</a>.</li>
     <li><strong>Amazon Associates</strong> — when you tap a "Shop" link beside a recommended part, the App opens an Amazon search URL in your browser or the Amazon app. Amazon, not ProDIY, handles the shopping session and any purchase. If you complete a qualifying purchase, ProDIY may receive a referral commission from Amazon at no extra cost to you. Privacy: <a href="https://www.amazon.com/privacy" rel="noopener">amazon.com/privacy</a>.</li>
   </ul>
-  <p>We do not embed advertising SDKs, social-login SDKs, or analytics SDKs beyond the above.</p>
+  <p>We do not embed advertising SDKs, social-login SDKs other than Sign in with Apple, or analytics SDKs beyond the above.</p>
 
   <h2>12. Affiliate links</h2>
   <p>
