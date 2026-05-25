@@ -95,11 +95,25 @@
     background: var(--accent-deep);
     text-decoration: none;
   }
+  .open-button.disabled {
+    background: var(--ink-3);
+    pointer-events: none;
+    opacity: 0.6;
+  }
   .fineprint {
     color: var(--ink-3);
     font-size: 14px;
     margin-top: 24px;
   }
+  .desktop-note {
+    color: var(--ink-2);
+    font-size: 15px;
+    margin: 32px auto 0;
+    max-width: 480px;
+    text-align: left;
+  }
+  .desktop-note ol { padding-left: 22px; }
+  .desktop-note li { margin: 8px 0; }
   a { color: var(--accent); text-decoration: underline; text-decoration-color: rgba(0, 124, 194, 0.3); text-underline-offset: 3px; }
   a:hover { color: var(--accent-deep); text-decoration-color: var(--accent); }
   footer.foot {
@@ -111,42 +125,22 @@
     font-size: 14px;
   }
   footer.foot a { color: var(--accent); }
-  #fallback { display: none; }
+  /* States */
+  body[data-state="ios"] .ios-only { display: block; }
+  body[data-state="ios"] .desktop-only { display: none; }
+  body[data-state="desktop"] .ios-only { display: none; }
+  body[data-state="desktop"] .desktop-only { display: block; }
+  body[data-state="ios-fallback"] .ios-only-initial { display: none; }
+  body[data-state="ios-fallback"] .ios-fallback { display: block; }
+  .ios-only, .desktop-only, .ios-fallback { display: none; }
   @media (max-width: 600px) {
     body { font-size: 16px; }
     main { padding: 56px 20px 64px; }
     h1 { font-size: 26px; }
   }
 </style>
-<script>
-  // Immediate redirect — runs in <head> before body paints, so users
-  // see the in-page UI for at most a single frame before iOS hands
-  // the URL to the ProDIY app.
-  (function () {
-    // Supabase auth redirects sometimes carry tokens in the URL fragment
-    // (#access_token=...) and sometimes in the query string (?token=...).
-    // Forward whichever is present so the app's deep-link handler can
-    // call supabase.auth.exchangeCodeForSession(...) with the right input.
-    var hash = window.location.hash || "";
-    var search = window.location.search || "";
-    var params = "";
-    if (hash.length > 1) {
-      params = hash.substring(1);
-    } else if (search.length > 1) {
-      params = search.substring(1);
-    }
-    var appUrl = "prodiy://auth/verify" + (params ? "?" + params : "");
-    window._prodiyAppUrl = appUrl;
-    // Use replace() so this page doesn't enter browser history.
-    try {
-      window.location.replace(appUrl);
-    } catch (e) {
-      // If replace fails (very rare), the fallback button below covers it.
-    }
-  })();
-</script>
 </head>
-<body>
+<body data-state="loading">
 <header class="brand">
   <div class="inner">
     <a class="home" href="/">🦫 ProDIY</a>
@@ -156,19 +150,43 @@
 </header>
 
 <main>
-  <h1>Opening ProDIY…</h1>
-  <p class="intro">
-    We're handing you back to the ProDIY app on your iPhone to finish verifying your email. This should happen automatically.
-  </p>
-  <div class="spinner" aria-hidden="true"></div>
+  <!-- iOS: initial loading state, before redirect attempt -->
+  <div class="ios-only ios-only-initial">
+    <h1>Opening ProDIY…</h1>
+    <p class="intro">
+      We're handing you back to the ProDIY app on your iPhone to finish verifying your email.
+    </p>
+    <div class="spinner" aria-hidden="true"></div>
+  </div>
 
-  <div id="fallback">
-    <div class="callout">
-      <strong>Didn't open automatically?</strong> Tap the button below to open ProDIY manually.
-    </div>
-    <a id="open-link" href="#" class="open-button">Open ProDIY app</a>
+  <!-- iOS: fallback after redirect didn't work -->
+  <div class="ios-only ios-fallback">
+    <h1>Almost there</h1>
+    <p class="intro">
+      Your email is verified. Tap the button below to open ProDIY and finish signing in.
+    </p>
+    <a id="open-link-ios" href="#" class="open-button">Open ProDIY app</a>
     <p class="fineprint">
-      If you don't have ProDIY installed, please install it from the App Store first, then tap your verification link again.
+      If you don't have ProDIY installed, install it from the App Store first, then tap your verification link again.
+    </p>
+  </div>
+
+  <!-- Desktop: show the situation clearly -->
+  <div class="desktop-only">
+    <h1>Email verified ✓</h1>
+    <p class="intro">
+      Your ProDIY email is confirmed. To finish signing in, you'll need to open this link from your iPhone — the ProDIY app is iOS-only at the moment.
+    </p>
+    <div class="callout">
+      <strong>How to finish:</strong>
+      <ol>
+        <li>Open the verification email on your iPhone.</li>
+        <li>Tap the same link you clicked here.</li>
+        <li>iOS will open ProDIY and finish signing you in.</li>
+      </ol>
+    </div>
+    <p class="fineprint">
+      You can also just open the ProDIY app on your iPhone and sign in with your email and password — verification is already done.
     </p>
   </div>
 </main>
@@ -178,17 +196,52 @@
 </footer>
 
 <script>
-  // After 2.5s, if we're still on this page, show the fallback. iOS
-  // sometimes blocks automatic prodiy:// redirects from email clients
-  // and requires an explicit tap — the button below covers that.
-  setTimeout(function () {
-    var fb = document.getElementById("fallback");
-    var ol = document.getElementById("open-link");
-    if (fb && ol) {
-      fb.style.display = "block";
-      ol.setAttribute("href", window._prodiyAppUrl || "prodiy://");
+  (function () {
+    // 1) Detect platform and build the app URL.
+    var ua = navigator.userAgent || "";
+    var isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+
+    var hash = window.location.hash || "";
+    var search = window.location.search || "";
+    var params = "";
+    if (hash.length > 1) {
+      params = hash.substring(1);
+    } else if (search.length > 1) {
+      params = search.substring(1);
     }
-  }, 2500);
+    // Mobile app's registered scheme is the iOS bundle ID: ai.prodiy.app
+    var appUrl = "ai.prodiy.app://auth/verify" + (params ? "?" + params : "");
+
+    // 2) Set initial state so the right block renders.
+    document.body.setAttribute("data-state", isIOS ? "ios" : "desktop");
+
+    // Wire the iOS fallback button now so it's ready when it appears.
+    var openLink = document.getElementById("open-link-ios");
+    if (openLink) openLink.setAttribute("href", appUrl);
+
+    // 3) On iOS only, attempt the redirect AFTER the page renders.
+    //    Desktop does nothing — the user already sees the "open on iPhone"
+    //    instructions, and trying to navigate to a custom scheme would
+    //    only confuse them.
+    if (isIOS) {
+      // Small delay so the page paints first; users see a friendly
+      // loading state before iOS hands control to the ProDIY app.
+      setTimeout(function () {
+        try {
+          window.location.href = appUrl;
+        } catch (e) {
+          // Ignore — fallback appears below.
+        }
+      }, 400);
+
+      // 4) If we're still here ~2.5s later, the redirect failed
+      //    (no app installed, scheme blocked by email client, etc).
+      //    Swap to the fallback CTA so the user can tap manually.
+      setTimeout(function () {
+        document.body.setAttribute("data-state", "ios-fallback");
+      }, 2500);
+    }
+  })();
 </script>
 </body>
 </html>
