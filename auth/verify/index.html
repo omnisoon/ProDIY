@@ -209,8 +209,10 @@
     } else if (search.length > 1) {
       params = search.substring(1);
     }
-    // Mobile app's registered scheme is the iOS bundle ID: ai.prodiy.app
-    var appUrl = "ai.prodiy.app://auth/verify" + (params ? "?" + params : "");
+    // Mobile app's registered custom URL scheme. iOS rejects dot-separated
+    // reverse-domain schemes (ai.prodiy.app) as invalid for custom URL
+    // schemes, so we use a single-word scheme registered via expo.scheme.
+    var appUrl = "prodiy://auth/verify" + (params ? "?" + params : "");
 
     // 2) Set initial state so the right block renders.
     document.body.setAttribute("data-state", isIOS ? "ios" : "desktop");
